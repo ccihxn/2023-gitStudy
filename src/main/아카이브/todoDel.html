@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+
+</head>
+<body>
+<h3>To Do List</h3>
+<form method="POST" action="/todoDel">
+  <input name="newTodo" placeholder="오늘 할 일"/>
+  <button type="submit">추가</button><br>
+  <button type="submit" onclick="deleteHandler()">삭제</button>
+</form>
+<table>
+  <tr th:each="todo : ${todoList}">
+    <td><input type="checkbox" name="deletedTodos" th:data-todo-id="${todo.id}" /></td>
+    <td th:text="${todo.title}"></td>
+  </tr>
+</table>
+</body>
+<script>
+  const deleteHandler = (_) => {
+    const checkedIds = Array.from(document.querySelectorAll('input[name="deletedTodos"]:checked'))
+            .map(x => x.getAttribute("data-todo-id"));
+    fetch("/todoDel", {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(checkedIds)
+    }).then(_ => location.reload())
+  };
+</script>
+</html>

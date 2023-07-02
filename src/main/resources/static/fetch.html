@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="btn_read">Fetch List</button>
+<ul id="list">
+</ul>
+<script>
+  function loadNewsList() {
+    fetch('http://localhost:8080/')
+            .then((resp) => resp.json())
+            .then(function(json) {
+              let list = document.getElementById('list');
+              list.innerHTML = '';
+
+              json.map((news) => `<li><a href="${news.address}">${news.title}</a></li>`)
+                      .forEach((news) => list.innerHTML += news);
+            });
+  }
+
+  document.getElementById('btn_read').addEventListener("click", loadNewsList);
+</script>
+</body>
+</html>
